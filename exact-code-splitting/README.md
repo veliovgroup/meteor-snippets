@@ -4,8 +4,8 @@ How to implement exact code splitting in Meteor.js following PWA principles.
 
 ## Files
 
-- [`persistent-reactive.js`]() — Hybrid of localStorage and *ReactiveVar*;
-- [`promise-method.js`]() — Method wrapped into promise.
+- [`persistent-reactive.js`](https://github.com/veliovgroup/meteor-snippets/blob/main/exact-code-splitting/persistent-reactive.js) — Hybrid of localStorage and *ReactiveVar*;
+- [`promise-method.js`](https://github.com/veliovgroup/meteor-snippets/blob/main/exact-code-splitting/promise-method.js) — Method wrapped into promise.
 
 ## Measuring
 
