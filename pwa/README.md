@@ -8,6 +8,10 @@ This is set of snippets related to implementing PWA coupled with Meteor.js front
 - [`setup-service-worker.js`](https://github.com/veliovgroup/meteor-snippets/blob/main/pwa/setup-service-worker.js) — Client/Browser Service Worker registration and control;
 - [`reload.js`](https://github.com/veliovgroup/meteor-snippets/blob/main/pwa/reload.js) — Catch when Meteor's client ready to upgrade to the next version.
 
+## Resources
+
+- [realfavicongenerator](https://realfavicongenerator.net) — Generate all necessary icons and `manifests`
+
 ## Why `sw-v1.js`?
 
 Sadly there are some disadvantages using Service Worker as a static file. After changing code of Service Worker next items got to get updated:
@@ -18,6 +22,10 @@ Sadly there are some disadvantages using Service Worker as a static file. After 
 - Manually minify Service Worker file, *if necessary*.
 
 While it looks like a lot of extra-things to do, in fact once you got it stable serving its purpose this file won't have much of the changes. We decided that 4 manual actions doesn't match possible efforts to automate this process. Perhaps 3-5 lines `.sh`ell script can automate at least 2 steps from above :)
+
+## Get all assets
+
+To get ServiceWorker running you will need set of "assets", best way to generate and copy-paste it in your project from [realfavicongenerator](https://realfavicongenerator.net)
 
 ## Create static sw.js
 
@@ -38,11 +46,11 @@ Please refer to well documented and annotated [`sw-v1.js` source](https://github
 
 Main caching logic is located in `fetch` event. Caching strategy:
 
-1. Check if request is *cacheble*
-2. Check for cached request
-2.1. __If request is in the cache__: return cached request and re-validate resource in parallel to updating cache
-2.2. __If request isn't found in the cache__: request resource and cache for future use
-2.3. __If request is failed__: return "service unavailable" response
+- 1. Check if request is *cacheble*
+- 2. Check for cached request
+  - 2.1. __If request is in the cache__: return cached request and re-validate resource in parallel to updating cache
+  - 2.2. __If request isn't found in the cache__: request resource and cache for future use
+  - 2.3. __If request is failed__: return "service unavailable" response
 
 ### Register ServiceWorker
 
