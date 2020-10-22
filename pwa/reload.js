@@ -31,7 +31,7 @@ const onReload = async () => {
   }
 
   try {
-    // MAKE SURE TO UNREGISTER ALL ServiceWorkerRegistration(s)
+    // UNREGISTER ALL ServiceWorkerRegistration(s)
     const swRegistrations = await navigator.serviceWorker.getRegistrations();
     for (let registration of swRegistrations) {
       await registration.unregister();

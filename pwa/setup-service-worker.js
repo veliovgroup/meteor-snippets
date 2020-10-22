@@ -22,7 +22,7 @@ const setUpServiceWorker = async (force) => {
 
         window.addEventListener('load', async () => {
           try {
-            await navigator.serviceWorker.register(Meteor.absoluteUrl('sw-v1.min.js'));
+            await navigator.serviceWorker.register(Meteor.absoluteUrl('sw-v1.js'));
           } catch (error) {
             console.info('Can\'t load SW');
             console.error(error);
