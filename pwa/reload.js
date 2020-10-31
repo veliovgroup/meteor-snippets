@@ -4,10 +4,13 @@
 
 import { Reload } from 'meteor/reload';
 
+/*
+ * @function
+ * @name onReload
+ * @summary REFRESH, INVALIDATE, UNREGISTER, AND PURGE ALL POSSIBLE CACHES. THEN RELOAD THE PAGE
+ * @returns {void 0}
+ */
 const onReload = async () => {
-  // REFRESH, INVALIDATE, UNREGISTER, AND PURGE
-  // ALL POSSIBLE CACHES
-
   try {
     window.applicationCache.swapCache();
   } catch (error) {

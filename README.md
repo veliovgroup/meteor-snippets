@@ -16,7 +16,7 @@ This repository was created as supportive documentation to my talk at [Meteor Im
 
 - [Exact code splitting](https://github.com/veliovgroup/meteor-snippets/tree/main/exact-code-splitting#meteorjs-exact-code-splitting)
 - [PWA: Service worker](https://github.com/veliovgroup/meteor-snippets/tree/main/pwa#pwa)
-- [PWA: Push Notifications](https://github.com/veliovgroup/meteor-snippets/tree/main/pwa-push-notifications)
+- [PWA: Push Notifications](https://github.com/veliovgroup/meteor-snippets/tree/main/pwa-push-notifications) — Incremental update to the [PWA](https://github.com/veliovgroup/meteor-snippets/tree/main/pwa#pwa) tutorial
 - [DevOps: Deployment & Spawning](https://github.com/veliovgroup/meteor-snippets/tree/main/devops)
 
 ## Support Open Source Development:

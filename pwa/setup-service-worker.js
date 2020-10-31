@@ -15,10 +15,10 @@ const setUpServiceWorker = async (force) => {
   try {
     if ('serviceWorker' in navigator) {
       if (force === true || !navigator.serviceWorker.controller) {
-        window.addEventListener('beforeinstallprompt', () => {
-          // This is a great place to tell to your UI that
-          // Service Worker is supported by this browser
-        });
+        // window.addEventListener('beforeinstallprompt', () => {
+        //   // This is a great place to tell to your UI that
+        //   // Service Worker is supported by this browser
+        // });
 
         window.addEventListener('load', async () => {
           try {
