@@ -1,0 +1,11 @@
+{
+  "vapid": {
+    "email": "mailto:webmaster@example.com",
+    "privateKey": ""
+  },
+  "public": {
+    "vapid": {
+      "publicKey": ""
+    }
+  }
+}
