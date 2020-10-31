@@ -13,7 +13,16 @@ This is set of snippets related to implementing PWA with Web Push Notifications 
   - `.check()` — Check and ensure PNs activated on the browser
   - `.enable()` — Enable/Subscribe to Push Notifications. Set `.subscription` property
   - `.disable()` — Disable/Unsubscribe from Push Notifications
-- [`web-push-server.js`](https://github.com/veliovgroup/meteor-snippets/blob/main/pwa-push-notifications/web-push-server.js) — Push Web Notifications from *Server*
+- [`web-push-server.js`](https://github.com/veliovgroup/meteor-snippets/blob/main/pwa-push-notifications/web-push-server.js) — Push Web Notifications from *Server*. `webPush` object methods and properties:
+  - `.send(subscription, messageObj)`
+    - `subscription` {*String*} — Object as a string, from `ServiceWorkerRegistration#pushManager.getSubscription()`
+    - `messageObj` {*Object*} — Message body as plain-object
+      - `messageObj.data.url` {*String*} — URL to follow by clicking on Notification box
+      - `messageObj.title` {*String*} - Notification title
+      - `messageObj.body` {*String*} - Notification body
+      - `messageObj.icon` {*String*} - URL to the image
+      - `messageObj.badge` {*String*} - URL to the image
+      - [see all available options](https://github.com/veliovgroup/meteor-snippets/blob/main/pwa-push-notifications/web-push-server.js#L15)
 - [`settings.json`](https://github.com/veliovgroup/meteor-snippets/blob/main/pwa-push-notifications/settings.json):
   - `vapid` {*Object*}
   - `vapid.email` {*string*} — Tech support email address, example `mailto:webmaster@example.com`;
