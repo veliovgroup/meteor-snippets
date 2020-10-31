@@ -10,7 +10,8 @@ This is set of snippets related to implementing PWA coupled with Meteor.js front
 
 ## Resources
 
-- [realfavicongenerator](https://realfavicongenerator.net) — Generate all necessary icons and `manifests`
+- [maskable.app](https://maskable.app/editor) — Generate/Edit application icon, make sure "Minimum safe area" selected
+- [realfavicongenerator](https://realfavicongenerator.net) — Generate necessary PWA icons and `.manifest`
 
 ## Why `sw-v1.js`?
 
