@@ -1,5 +1,15 @@
 # Meteor.js: DevOps
 
+This is tutorial and snippets related to DevOps, deployment, and maintenance of node.js/meteor.js web applications
+
+## Files and links:
+
+- [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh) — Semi-automated deploy bash script
+- [`steps.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/steps.sh) — Fresh Linux/Debian/Ubuntu setup step-by-step
+- [`mongod.conf`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/mongod.conf) — Local MongoDB configuration file
+- [`nginx.conf`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/nginx.conf) — Server Nginx `http {}` configuration file
+- [`sever.conf`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/sever.conf) — Host Nginx `server {}` configuration file
+
 ## Linux setup
 
 Let's start with a good tip:
@@ -41,7 +51,7 @@ application/x-web-app-manifest+json   webapp;
 
 ## Deploy
 
-To deploy we use [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh), here's manual for this script:
+To deploy we use [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh), script manual:
 
 ```text
 Usage:
