@@ -8,6 +8,7 @@ apt-get update
 apt-get remove sudo
 apt-get dist-upgrade -s
 apt-get dist-upgrade -y
+apt-get install git build-essential
 dpkg-reconfigure tzdata
 
 # tune up .bash_profile
@@ -106,9 +107,6 @@ chown appuser:appuser /data/meteor-files
 
 # add manifest+json mime-type [see README.md for more details](https://github.com/veliovgroup/meteor-snippets/tree/main/devops)
 # adding two lines to `/etc/nginx/mime.types`
-
-# Install git and build-essential
-apt-get install git build-essential
 
 # Got to appuser's home directory
 cd /home/appuser
