@@ -5,6 +5,7 @@ This is set of tutorials and snippets related to DevOps, deployment, and mainten
 ## ToC:
 
 - [Files and links](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#files-and-links)
+- __[Tutorial goals](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#tutorial-setup)__
 - [Linux setup](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#linux-setup)
   - [Setting up](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#setting-up) — Step-by-step process, for detailed instructions read annotations in [`steps.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/steps.sh)
   - [Security](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#security)
@@ -13,6 +14,13 @@ This is set of tutorials and snippets related to DevOps, deployment, and mainten
     - [MongoDB](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application)
 - [Nginx setup](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#nginx)
 - [Deploy](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy)
+  - [First deploy](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#first-deploy)
+  - [Node.js app](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-nodejs-app)
+  - [Meteor app](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-meteor-app)
+  - [Static assets app](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-static-app)
+  - [Deploy with changes in Nginx](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-with-changes-in-nginxconf) configuration file
+- [SEO](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#seo)
+- [Further steps](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#further-steps) and recommendations
 
 ## Files and links:
 
@@ -23,11 +31,19 @@ This is set of tutorials and snippets related to DevOps, deployment, and mainten
 - [`server.conf`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/server.conf) — Host Nginx `server {}` configuration file
 - [`mime.types`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/mime.types) — A map of file extensions and its mime-types for static files served over Nginx
 
+## Tutorial goals
+
+- Setup Linux environment
+- Setup local MongoDB
+- Setup Nginx flavored with Phusion Passenger
+- Automate further deployments
+- Follow security "best practices"
+
 ## Linux setup
 
 Let's start with a good tip:
 
-> Always keep a log of your actions while setting up Linux server in a text `.sh` file. I usually call this file [`steps.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/steps.sh).
+> Always keep a log of your actions while setting up Linux server in a text `.sh` file. I usually call such file [`steps.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/steps.sh).
 
 For this project virtual Linux Debian 10 with 2vCPU, 4GB, and SSD storage are used.
 
@@ -57,12 +73,14 @@ Check out set of [Linux tutorials](https://github.com/veliovgroup/ostrio/tree/ma
 
 ### Security
 
+Implement well-known "best practices" for Linux, Nginx, and MongoDB. Check out our [Linux security](https://github.com/veliovgroup/ostrio/tree/master/tutorials/linux/security) tutorials collection for advanced security options.
+
 #### Application
 
 - No data-collection
 - No file reading nor processing
 - All files has TTL since the moment it was uploaded and every file would be eventually removed
-- Application "secrets" stored in static `/etc/nginx/secrets.files-veliov-com.conf` file not tracked with git
+- Application "secrets" stored in static ["secrets" file](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/secrets.files-veliov-com.conf) not tracked with git
 
 #### Application user
 
@@ -90,7 +108,7 @@ su -s /bin/bash -c 'npm ci --production' appuser
 
 #### MongoDB
 
-By default in [suggested `mongod.conf`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/mongod.conf) file MongoDB would listen only on local network. Second security advise is random port for MongoDB, find `[PORT]` in [`mongod.conf`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/mongod.conf) and replace with a value between `1024` and `65535`. Make sure `MONGO_URL` environment variable in [`server.conf`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/server.conf) is set to the correct value.
+By default in [suggested `mongod.conf`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/mongod.conf) file MongoDB would listen only on local network. Second security advise is random port for MongoDB, find `[PORT]` in [`mongod.conf`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/mongod.conf) and replace with a value between `1024` and `65535`. Make sure `MONGO_URL` environment variable in [`server.conf`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/server.conf) or in ["secrets" file](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/secrets.files-veliov-com.conf) is set to the correct value.
 
 ## Nginx
 
@@ -135,7 +153,7 @@ application/x-web-app-manifest+json   webapp;
 
 ## Deploy
 
-To deploy we use [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh), script manual:
+To deploy we use [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh). By default this script able to deploy static, node.js, and meteor.js websites backed with Nginx. You can get up-to-date help from `./deploy -h`, script manual:
 
 ```text
 Usage:
@@ -158,7 +176,13 @@ First deploy require some extra preparation:
 2. Run deploy script with `--no-restart` flag (*see examples below*)
 3. Restart nginx: `service nginx restart`
 
-That's it! Now let's deploy using [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh) script. By default this script would work with static, node.js, and meteor.js websites backed with Nginx. You can get up-to-date help from `./deploy -h`
+```shell
+./deploy.sh app-directory-name --no-restart
+# Double-check config for errors:
+service nginx configtest
+# restart nginx
+service nginx restart
+```
 
 ### Deploy node.js app
 
@@ -178,16 +202,6 @@ That's it! Now let's deploy using [`deploy.sh`](https://github.com/veliovgroup/m
 ./deploy.sh app-directory-name --no-restart
 ```
 
-### First deploy steps
-
-```shell
-./deploy.sh app-directory-name --no-restart
-# Double-check config for errors:
-service nginx configtest
-# restart nginx
-service nginx restart
-```
-
 ### Deploy with changes in `nginx.conf`
 
 ```shell
@@ -198,9 +212,112 @@ service nginx configtest
 service nginx restart
 ```
 
+## SEO
+
+To make this project "crawlable" by search engines, social networks, and web-crawlers on this project we are using:
+
+- [`ostrio:flow-router-meta`](https://github.com/VeliovGroup/Meteor-flow-router-meta) package to generate meta-tags and title
+- [Pre-rendering](https://prerendering.com/) service to serve static HTML
+
+### Meta tags and title
+
+Using [`ostrio:flow-router-meta`](https://github.com/VeliovGroup/Meteor-flow-router-meta) package controlling meta-tags content as easy as extending *FlowRouter* definition with `{ meta, title, link }` properties:
+
+```js
+FlowRouter.route('/about', {
+  name: 'about',
+  title: 'About',
+  meta: {
+    keywords: {
+      name: 'keywords',
+      itemprop: 'keywords',
+      content: 'about, file, files, share, sharing, upload, service, free, details'
+    },
+    description: {
+      name: 'description',
+      itemprop: 'description',
+      property: 'og:description',
+      content: 'About file-sharing web application'
+    },
+    'twitter:description': 'About file-sharing web application'
+  },
+  action() {
+    this.render('layout', 'about');
+  }
+});
+```
+
+Set default meta tags and page title using `FlowRouter.globals.push({ meta })`:
+
+```js
+const title = 'Default page title up to 65 symbols';
+const description = 'Default description up to 160 symbols';
+
+FlowRouter.globals.push({ title });
+FlowRouter.globals.push({
+  meta: {
+    robots: 'index, follow',
+    keywords: {
+      name: 'keywords',
+      itemprop: 'keywords',
+      content: 'keywords, separated, with, comma'
+    },
+    'og:title': {
+      name: 'title',
+      property: 'og:title',
+      content() {
+        return document.title;
+      }
+    },
+    description: {
+      name: 'description',
+      itemprop: 'description',
+      property: 'og:description',
+      content: description
+    }
+  }
+});
+```
+
+Activate `meta` and `title` packages:
+
+```js
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
+import { FlowRouterMeta, FlowRouterTitle } from 'meteor/ostrio:flow-router-meta';
+
+/* ... DEFINE FLOWROUTER RULES HERE, BEFORE INIT ... */
+
+new FlowRouterTitle(FlowRouter);
+new FlowRouterMeta(FlowRouter);
+```
+
+### Pre-rendering
+
+To pre-render JS-driven templates (Blaze, React, Vue, etc.) to HTML we are using [pre-rendering](https://prerendering.com/) via [`siderable-middleware` package](https://github.com/VeliovGroup/spiderable-middleware#meteor-specific-usage):
+
+```js
+/*
+ * @locus Server
+ */
+
+import { Meteor } from 'meteor/meteor';
+import { WebApp } from 'meteor/webapp';
+import Spiderable from 'meteor/ostrio:spiderable-middleware';
+
+WebApp.connectHandlers.use(new Spiderable({
+  serviceURL: 'https://render.ostr.io',
+  auth: 'pass:login',
+  only: [/^\/?$/, /^\/about\/?$/i, /^\/f\/[A-z0-9]{16}\/?$/i]
+}));
+
+// Allow pre-rendering only for existing public routes: `index`, `about` `file`
+```
+
 ## Further steps
 
 Recommended further steps
 
-1. Enhance security of the server with [changing default SSH port](https://github.com/veliovgroup/ostrio/blob/master/tutorials/linux/security/change-ssh-port.md) and restricting SSH authentication [only by using SSH-key](https://github.com/veliovgroup/ostrio/blob/master/tutorials/linux/security/use-ssh-keys.md)
-2. Integrate ostr.io to enable [24/7 monitoring](https://snmp-monitoring.com/), get [the best SEO score](https://prerendering.com/), and [protect a domain name](https://domain-protection.info/)
+1. Read annotations of [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh) and learn how it works from its [source code](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh)
+2. Enhance security of the server with [changing default SSH port](https://github.com/veliovgroup/ostrio/blob/master/tutorials/linux/security/change-ssh-port.md) and restricting SSH authentication [only by using SSH-key](https://github.com/veliovgroup/ostrio/blob/master/tutorials/linux/security/use-ssh-keys.md)
+3. Read other [Linux tutorials](https://github.com/veliovgroup/ostrio/tree/master/tutorials/linux)
+4. Integrate ostr.io to enable [24/7 monitoring](https://snmp-monitoring.com/), get [the best SEO score](https://prerendering.com/), and [protect a domain name](https://domain-protection.info/)
