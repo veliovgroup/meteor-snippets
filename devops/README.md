@@ -251,13 +251,15 @@ Run this script against repository with `.meteor` and `nginx.conf` in the root d
 
 ### Deploy static app
 
-Run this script against repository with `nginx.conf` in the root directory. If static app powered with node and `package.json` is found in the root directory script will install all required dependencies/
+Run this script against repository with `nginx.conf` in the root directory. If static app powered with node and `package.json` is found in the root directory script will install all required dependencies.
 
 ```shell
 ./deploy.sh app-directory-name --no-restart
 ```
 
 ### Deploy with changes in `nginx.conf`
+
+If `nginx.conf` host definition was changed it would require `--no-restart` flag and two extra steps to run gap-less zero-downtime deploy:
 
 ```shell
 ./deploy.sh app-directory-name --no-restart
