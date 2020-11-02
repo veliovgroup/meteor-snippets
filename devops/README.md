@@ -14,6 +14,7 @@ This is set of tutorials and snippets related to DevOps, deployment, and mainten
     - [MongoDB](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application)
 - [Nginx setup](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#nginx)
 - [Deploy](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy)
+  - [Deploy script features](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-script-features)
   - [First deploy](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#first-deploy)
   - [Node.js app](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-nodejs-app)
   - [Meteor app](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-meteor-app)
@@ -162,11 +163,18 @@ Usage:
 By default this script will restart Passenger, unless --load-only is passed
 Otherwise it will restart Phusion Passenger after sources update
 
-repo         - Name of web app repository and working directory
---help | -h  - This help docs
---load-only  - Load only source code without Passenger restart
---meteor     - Build meteor app locally
+repo        - Name of web app repository and working directory
+--help | -h - This help docs
+--load-only - Load only source code without Passenger restart
+--meteor    - Build meteor app locally
 ```
+
+### Deploy script features
+
+- Compatible with static websites
+- Compatible with node.js backends
+- Compatible with (*raw and build*) meteor.js web applications
+- Gap-less zero-downtime deployments
 
 ### First deploy
 
@@ -306,18 +314,20 @@ import Spiderable from 'meteor/ostrio:spiderable-middleware';
 
 WebApp.connectHandlers.use(new Spiderable({
   serviceURL: 'https://render.ostr.io',
-  auth: 'pass:login',
-  only: [/^\/?$/, /^\/about\/?$/i, /^\/f\/[A-z0-9]{16}\/?$/i]
+  auth: 'pass:login', // <-- obtain from ostr.io
+  only: [ // <-- Allow pre-rendering only for existing public routes: `index`, `about` `file`
+    /^\/?$/,
+    /^\/about\/?$/i,
+    /^\/f\/[A-z0-9]{16}\/?$/i
+  ]
 }));
-
-// Allow pre-rendering only for existing public routes: `index`, `about` `file`
 ```
 
 ## Further steps
 
 Recommended further steps
 
-1. Read annotations of [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh) and learn how it works from its [source code](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh)
+1. Read annotations in [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh) and learn how it works from its [source code](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh)
 2. Enhance security of the server with [changing default SSH port](https://github.com/veliovgroup/ostrio/blob/master/tutorials/linux/security/change-ssh-port.md) and restricting SSH authentication [only by using SSH-key](https://github.com/veliovgroup/ostrio/blob/master/tutorials/linux/security/use-ssh-keys.md)
 3. Read other [Linux tutorials](https://github.com/veliovgroup/ostrio/tree/master/tutorials/linux)
 4. Integrate ostr.io to enable [24/7 monitoring](https://snmp-monitoring.com/), get [the best SEO score](https://prerendering.com/), and [protect a domain name](https://domain-protection.info/)
