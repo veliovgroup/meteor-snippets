@@ -24,6 +24,7 @@ This is set of tutorials and snippets related to DevOps, deployment, and mainten
 - [SEO](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#seo)
   - [Meta tags and title](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#meta-tags-and-title)
   - [Pre-rendering](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#pre-rendering)
+- [Debugging](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#debugging)
 - [Further steps](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#further-steps) and recommendations
 
 ## Files and links:
@@ -370,6 +371,22 @@ WebApp.connectHandlers.use(new Spiderable({
     /^\/f\/[A-z0-9]{16}\/?$/i
   ]
 }));
+```
+
+## Debugging
+
+To debug meteor/node.js application use Nginx logs:
+
+```shell
+tail -n 100 -f /var/log/nginx/error.log
+```
+
+Using `tail`, where `-n 100` means show 100 lines from bottom of the file, and `-f` means "follow" live-file updates. press <kbd>control</kbd>+<kbd>c</kbd> to exit live-mode.
+
+Same can be done for MongoDB logs:
+
+```shell
+tail -n 100 -f /var/log/mongodb/mongod.log
 ```
 
 ## Further steps
