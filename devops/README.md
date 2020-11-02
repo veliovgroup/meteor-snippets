@@ -10,6 +10,7 @@ This is set of tutorials and snippets related to DevOps, deployment, and mainten
   - [Setting up](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#setting-up) — Step-by-step process, for detailed instructions read annotations in [`steps.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/steps.sh)
   - [Security](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#security)
     - [Application](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application)
+    - [Managing your "secrets"](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#managing-your-secrets)
     - [non-root user](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application-user)
     - [MongoDB](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application)
 - [Nginx setup](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#nginx)
@@ -82,6 +83,22 @@ Implement well-known "best practices" for Linux, Nginx, and MongoDB. Check out o
 - No file reading nor processing
 - All files has TTL since the moment it was uploaded and every file would be eventually removed
 - Application "secrets" stored in static ["secrets" file](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/secrets.files-veliov-com.conf) not tracked with git
+
+#### Managing your "secrets"
+
+Our "secrets" is something we would like to keep out of reach by *others*, and untracked by Git. This application (*and Meteor itself too*) designed with configuration options passed via [Linux Environment Variables](https://en.wikipedia.org/wiki/Environment_variable#Unix). Thanks to Phusion Passenger and Nginx we can pass all required variables via configuration file, and "secrets" can be dynamically loaded. In [`steps.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/steps.sh#L52) we create an empty configuration file:
+
+```shell
+touch /etc/nginx/secrets.files-veliov-com.conf
+```
+
+Edit this file with `nano`:
+
+```shell
+nano /etc/nginx/secrets.files-veliov-com.conf
+```
+
+And copy-paste settings from [sample "secrets" file](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/secrets.files-veliov-com.conf), __update values to match your setup and environment.__ [Host declaration in `server.conf` configured](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/server.conf#L34) to read environment variable ["secrets" file](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/secrets.files-veliov-com.conf). This file not tracked with git and should exist only on server with permissions to read only by `www-data` (*in our case — user used to run Nginx*).
 
 #### Application user
 
