@@ -174,7 +174,16 @@ application/x-web-app-manifest+json   webapp;
 
 ## Deploy
 
-To deploy we use [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh). By default this script able to deploy static, node.js, and meteor.js websites backed with Nginx. You can get up-to-date help from `./deploy -h`, script manual:
+To deploy we use [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh).
+
+- [Deploy script features](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-script-features)
+- [First deploy](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#first-deploy)
+- [Node.js app](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-nodejs-app)
+- [Meteor app](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-meteor-app)
+- [Static assets app](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-static-app)
+- [Deploy after changes in Nginx](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-with-changes-in-nginxconf) configuration file
+
+By default [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh) script able to deploy static, node.js, and meteor.js websites backed with Nginx. You can get up-to-date help from `./deploy -h`, script manual:
 
 ```text
 Usage:
@@ -206,6 +215,7 @@ To start using script (*[run as `apppuser` user](https://github.com/veliovgroup/
 
 First deploy require some extra preparation:
 
+0. As `root` go to `appuser` user "home" directory, with `cd /home/appuser/`
 1. `git clone [repo-url]` — Clone repository to a local directory ([`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh) should be located in the same directory)
 2. Run deploy script with `--no-restart` flag (*see examples below*)
 3. Restart nginx: `service nginx restart`
