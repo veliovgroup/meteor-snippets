@@ -5,7 +5,7 @@ This is set of tutorials and snippets related to DevOps, deployment, and mainten
 ## ToC:
 
 - [Files and links](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#files-and-links)
-- __[Tutorial goals](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#tutorial-setup)__
+- __[Tutorial goals](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#tutorial-goals)__
 - [Linux setup](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#linux-setup)
   - [Setting up](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#setting-up) — Step-by-step process, for detailed instructions read annotations in [`steps.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/steps.sh)
   - [Security](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#security)
