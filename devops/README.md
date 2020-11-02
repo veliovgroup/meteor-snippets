@@ -88,13 +88,13 @@ Implement well-known "best practices" for Linux, Nginx, and MongoDB. Check out o
 
 Our "secrets" is something we would like to keep out of reach by *others*, and untracked by Git. This application (*and Meteor itself too*) designed with configuration options passed via [Linux Environment Variables](https://en.wikipedia.org/wiki/Environment_variable#Unix). Thanks to Phusion Passenger and Nginx we can pass all required variables via configuration file, and "secrets" can be dynamically loaded. In [`steps.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/steps.sh#L52) we create an empty configuration file:
 
-```bash
+```shell
 touch /etc/nginx/secrets.files-veliov-com.conf
 ```
 
 Edit this file with `nano`:
 
-```bash
+```shell
 nano /etc/nginx/secrets.files-veliov-com.conf
 ```
 
@@ -104,7 +104,7 @@ And copy-paste settings from [sample "secrets" file](https://github.com/veliovgr
 
 For security reasons many actions should be performed as non-root user. In our case we're using `appuser`:
 
-```bash
+```shell
 useradd appuser
 mkdir -p /home/appuser
 usermod -m -d /home/appuser appuser
@@ -114,13 +114,13 @@ chmod 770 /home/appuser
 
 To login into new shell session as `appuser` user use `su`:
 
-```bash
+```shell
 su - appuser
 ```
 
 To execute a single command as `appuser` use `su -c`, for example to install NPM dependencies:
 
-```bash
+```shell
 su -s /bin/bash -c 'npm ci --production' appuser
 ```
 
@@ -132,7 +132,7 @@ By default in [suggested `mongod.conf`](https://github.com/veliovgroup/meteor-sn
 
 Install Nginx flavored with Phusion Passenger following [official docs](https://www.phusionpassenger.com/library/walkthroughs/deploy/nodejs/ownserver/nginx/oss/install_language_runtime.html), as time of writing (Oct 2020) next steps were necessary to perform on Debian 10:
 
-```bash
+```shell
 apt-get install nginx
 apt-get install -y dirmngr gnupg
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
@@ -156,7 +156,7 @@ passenger_env_var METEOR_SETTINGS '{"storagePath":"/data/meteor-files/uploads","
 
 To make sure configuration file has no errors run:
 
-```bash
+```shell
 service nginx configtest
 ```
 
@@ -201,7 +201,7 @@ First deploy require some extra preparation:
 2. Run deploy script with `--no-restart` flag (*see examples below*)
 3. Restart nginx: `service nginx restart`
 
-```bash
+```shell
 ./deploy.sh app-directory-name --no-restart
 # Double-check config for errors:
 service nginx configtest
@@ -211,25 +211,25 @@ service nginx restart
 
 ### Deploy node.js app
 
-```bash
+```shell
 ./deploy.sh app-directory-name
 ```
 
 ### Deploy Meteor app
 
-```bash
+```shell
 ./deploy.sh app-directory-name --meteor
 ```
 
 ### Deploy static app
 
-```bash
+```shell
 ./deploy.sh app-directory-name --no-restart
 ```
 
 ### Deploy with changes in `nginx.conf`
 
-```bash
+```shell
 ./deploy.sh app-directory-name --no-restart
 # Double-check config for errors:
 service nginx configtest
