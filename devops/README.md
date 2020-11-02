@@ -235,17 +235,23 @@ service nginx restart
 
 ### Deploy node.js app
 
+Run this script against repository with `package.json` and `nginx.conf` in the root directory.
+
 ```shell
 ./deploy.sh app-directory-name
 ```
 
 ### Deploy Meteor app
 
+Run this script against repository with `.meteor` and `nginx.conf` in the root directory.
+
 ```shell
 ./deploy.sh app-directory-name --meteor
 ```
 
 ### Deploy static app
+
+Run this script against repository with `nginx.conf` in the root directory. If static app powered with node and `package.json` is found in the root directory script will install all required dependencies/
 
 ```shell
 ./deploy.sh app-directory-name --no-restart
