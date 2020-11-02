@@ -8,11 +8,11 @@ This is set of tutorials and snippets related to DevOps, deployment, and mainten
 - __[Tutorial goals](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#tutorial-goals)__
 - [Linux setup](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#linux-setup)
   - [Setting up](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#setting-up) — Step-by-step process, for detailed instructions read annotations in [`steps.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/steps.sh)
-  - [Security](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#security)
-    - [Application](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application)
-    - [Managing your "secrets"](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#managing-your-secrets)
-    - [non-root user](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application-user)
-    - [MongoDB](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application)
+- [Security](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#security)
+  - [Application](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application)
+  - [Managing your "secrets"](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#managing-your-secrets)
+  - [non-root user](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application-user)
+  - [MongoDB](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application)
 - [Nginx setup](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#nginx)
 - [Deploy](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy)
   - [Deploy script features](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-script-features)
@@ -75,18 +75,23 @@ Check out set of [Linux tutorials](https://github.com/veliovgroup/ostrio/tree/ma
 18. Initiate first deploy `cd /home/appuser && ./deploy meteor-files-website --no-restart --meteor`
 19. Restart Nginx `service nginx restart`
 
-### Security
+## Security
 
 Implement well-known "best practices" for Linux, Nginx, and MongoDB. Check out our [Linux security](https://github.com/veliovgroup/ostrio/tree/master/tutorials/linux/security) tutorials collection for advanced security options.
 
-#### Application
+- [Application level security](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application)
+- [Manage "secrets"](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#managing-your-secrets)
+- [User non-root user](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application-user)
+- [MongoDB Security](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application)
+
+### Application
 
 - No data-collection
 - No file reading nor processing
 - All files has TTL since the moment it was uploaded and every file would be eventually removed
 - Application "secrets" stored in static ["secrets" file](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/secrets.files-veliov-com.conf) not tracked with git
 
-#### Managing your "secrets"
+### Managing your "secrets"
 
 Our "secrets" is something we would like to keep out of reach by *others*, and untracked by Git. This application (*and Meteor itself too*) designed with configuration options passed via [Linux Environment Variables](https://en.wikipedia.org/wiki/Environment_variable#Unix). Thanks to Phusion Passenger and Nginx we can pass all required variables via configuration file, and "secrets" can be dynamically loaded. In [`steps.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/steps.sh#L52) we create an empty configuration file:
 
@@ -102,7 +107,7 @@ nano /etc/nginx/secrets.files-veliov-com.conf
 
 And copy-paste settings from [sample "secrets" file](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/secrets.files-veliov-com.conf), __update values to match your setup and environment.__ [Host declaration in `server.conf` configured](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/server.conf#L34) to read environment variable ["secrets" file](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/secrets.files-veliov-com.conf). This file not tracked with git and should exist only on server with permissions to read only by `www-data` (*in our case — user used to run Nginx*).
 
-#### Application user
+### Application user
 
 For security reasons many actions should be performed as non-root user. In our case we're using `appuser`:
 
@@ -127,7 +132,7 @@ To execute a single command as `appuser` use `su -c`, for example to install NPM
 su -s /bin/bash -c 'npm ci --production' appuser
 ```
 
-#### MongoDB
+### MongoDB
 
 By default in [suggested `mongod.conf`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/mongod.conf) file MongoDB would listen only on local network. Second security advise is random port for MongoDB, find `[PORT]` in [`mongod.conf`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/mongod.conf) and replace with a value between `1024` and `65535`. Make sure `MONGO_URL` environment variable in [`server.conf`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/server.conf) or in ["secrets" file](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/secrets.files-veliov-com.conf) is set to the correct value.
 
