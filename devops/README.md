@@ -22,6 +22,8 @@ This is set of tutorials and snippets related to DevOps, deployment, and mainten
   - [Static assets app](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-static-app)
   - [Deploy with changes in Nginx](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-with-changes-in-nginxconf) configuration file
 - [SEO](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#seo)
+  - [Meta tags and title](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#meta-tags-and-title)
+  - [Pre-rendering](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#pre-rendering)
 - [Further steps](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#further-steps) and recommendations
 
 ## Files and links:
@@ -242,7 +244,7 @@ service nginx restart
 To make this project "crawlable" by search engines, social networks, and web-crawlers on this project we are using:
 
 - [`ostrio:flow-router-meta`](https://github.com/VeliovGroup/Meteor-flow-router-meta) package to generate meta-tags and title
-- [Pre-rendering](https://prerendering.com/) service to serve static HTML
+- [Pre-rendering](https://ostr.io/info/prerendering) service to serve static HTML
 
 ### Meta tags and title
 
@@ -318,7 +320,7 @@ new FlowRouterMeta(FlowRouter);
 
 ### Pre-rendering
 
-To pre-render JS-driven templates (Blaze, React, Vue, etc.) to HTML we are using [pre-rendering](https://prerendering.com/) via [`siderable-middleware` package](https://github.com/VeliovGroup/spiderable-middleware#meteor-specific-usage):
+To pre-render JS-driven templates (Blaze, React, Vue, etc.) to HTML we are using [pre-rendering](https://ostr.io/info/prerendering) via [`siderable-middleware` package](https://github.com/VeliovGroup/spiderable-middleware#meteor-specific-usage):
 
 ```js
 /*
