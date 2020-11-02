@@ -31,6 +31,7 @@ mkdir -p /home/appuser
 usermod -m -d /home/appuser appuser
 chown -R appuser:appuser /home/appuser
 chmod 770 /home/appuser
+chsh appuser -s /bin/bash
 
 # copy paste `mongod.conf` from this repo to `/etc/mongod.conf`
 

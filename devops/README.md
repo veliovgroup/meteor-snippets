@@ -112,6 +112,7 @@ mkdir -p /home/appuser
 usermod -m -d /home/appuser appuser
 chown -R appuser:appuser /home/appuser
 chmod 770 /home/appuser
+chsh appuser -s /bin/bash
 ```
 
 To login into new shell session as `appuser` user use `su`:
@@ -187,6 +188,12 @@ repo        - Name of web app repository and working directory
 --load-only - Load only source code without Passenger restart
 --meteor    - Build meteor app locally
 ```
+
+To start using script (*[run as `apppuser` user](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application-user)*):
+
+- Login as `appuser` with `su - appuser`
+- Copy-paste [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh) to non-root user "home" directory in our case it will be `/home/appuser/deploy.sh`
+- Make script executable: `chmod +x /home/appuser/deploy.sh`
 
 ### Deploy script features
 
