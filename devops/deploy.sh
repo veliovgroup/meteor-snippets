@@ -2,7 +2,13 @@
 
 # Hello there!
 # This is deploy script we use to pull
-# webapp repo from github
+# web application repository from GitHub
+#
+# This script does:
+# - move files
+# - build meteor
+# - test nginx configuration files
+# - no down-time restart
 
 name=$1
 flag=$2
@@ -142,7 +148,7 @@ echo "[ 4.0. ] Going to /var/www/$name"
 cd "/var/www/$name"
 if [ -f "./package.json" ]; then
   echo "[ 4.1. ] \`packages.json\` detected! Installing NPM dependencies"
-  su -s /bin/bash -c "cd /var/www/$name && npm ci --production" "$appusername"
+  su -s /bin/bash -c "cd /var/www/$name && npm ci --production" - "$appusername"
 fi
 
 # GO TO "HOME" DIRECTORY
