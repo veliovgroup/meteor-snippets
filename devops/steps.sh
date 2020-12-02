@@ -8,16 +8,25 @@ apt-get update
 apt-get remove sudo
 apt-get dist-upgrade -s
 apt-get dist-upgrade -y
-apt-get install git build-essential
+apt-get install git build-essential rsync apt-transport-https ca-certificates
 dpkg-reconfigure tzdata
 
 # tune up .bash_profile
+# DETAILED TUTORIAL: https://github.com/VeliovGroup/ostrio/blob/master/tutorials/linux/bash_profile-tuning.md
 
 # Install local MongoDB
 wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add -
 echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" | tee /etc/apt/sources.list.d/mongodb-org-4.4.list
-
+apt-get update
+apt-get install -y mongodb-org
 systemctl start mongod
+systemctl enable mongod.service
+
+# copy paste `mongod.conf` from this repo to `/etc/mongod.conf`
+
+mkdir -p /data/mongo
+chmod 777 /data
+chown mongodb:mongodb /data/mongo
 
 # FOR SECURITY REASONS AND AS A PART OF "BEST PRACTICES"
 # IT IS HIGHLY RECOMMENDED TO INSTALL CERTAIN APPS AND
@@ -32,27 +41,6 @@ usermod -m -d /home/appuser appuser
 chown -R appuser:appuser /home/appuser
 chmod 770 /home/appuser
 chsh appuser -s /bin/bash
-
-# copy paste `mongod.conf` from this repo to `/etc/mongod.conf`
-
-mkdir -p /data/mongo
-chmod 777 /data
-chown mongodb:mongodb /data/mongo
-
-# Install Nginx + Phusion Passenger
-apt-get install nginx
-apt-get install -y dirmngr gnupg
-apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
-apt-get install -y apt-transport-https ca-certificates
-echo deb https://oss-binaries.phusionpassenger.com/apt/passenger buster main > /etc/apt/sources.list.d/passenger.list
-apt-get update
-apt-get install -y libnginx-mod-http-passenger
-
-# Copy paste `nginx.conf` from this repo to `/etc/nginx/nginx.conf`
-# Create empty file for secrets
-touch /etc/nginx/secrets.files-veliov-com.conf
-# To make sure configuration file has no errors run:
-service nginx configtest
 
 ##########################[start as appuser]#####################################
 # Execute next few commands as "appuser" for security reasons
@@ -72,7 +60,7 @@ export PATH=$PATH:$HOME/.meteor
 #
 # Execute this command as "appuser" for security reasons
 # Node Version Manager: https://github.com/nvm-sh/nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
 # Add next two lines into `.bash_profile`
 # edit with nano ~/.bash_profile
 export NVM_DIR="$HOME/.nvm"
@@ -100,6 +88,20 @@ chmod +x ~/deploy.sh
 # Exit back to root
 exit
 ##############################[end as appuser]#####################################
+
+# Install Nginx + Phusion Passenger
+apt-get install nginx
+apt-get install -y dirmngr gnupg
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
+echo deb https://oss-binaries.phusionpassenger.com/apt/passenger buster main > /etc/apt/sources.list.d/passenger.list
+apt-get update
+apt-get install -y libnginx-mod-http-passenger
+
+# Copy paste `nginx.conf` from this repo to `/etc/nginx/nginx.conf`
+# Create empty file for secrets
+touch /etc/nginx/secrets.files-veliov-com.conf
+# To make sure configuration file has no errors run:
+service nginx configtest
 
 # create directory where uploaded files
 # are stored and set correct permissions
