@@ -103,6 +103,9 @@ touch /etc/nginx/secrets.files-veliov-com.conf
 # To make sure configuration file has no errors run:
 service nginx configtest
 
+# ENABLE LOGROTATE BY EDITING `/etc/logrotate.d/nginx`
+# FOLLOW LOGROTATE GUIDE: https://www.digitalocean.com/community/tutorials/how-to-configure-logging-and-log-rotation-in-nginx-on-an-ubuntu-vps
+
 # create directory where uploaded files
 # are stored and set correct permissions
 mkdir -p /data/meteor-files
