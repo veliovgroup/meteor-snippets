@@ -117,6 +117,6 @@ chown appuser:appuser /data/meteor-files
 # Got to appuser's home directory
 cd /home/appuser
 # -------- First deploy --------
-./deploy meteor-files-website --no-restart --meteor
+./deploy -bmpr meteor-files-website
 
 service nginx restart
