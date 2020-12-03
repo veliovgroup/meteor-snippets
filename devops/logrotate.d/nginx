@@ -1,0 +1,13 @@
+/var/log/nginx/*.log {
+        daily
+        rotate 52
+        missingok
+        compress
+        delaycompress
+        notifempty
+        create 0640 www-data adm
+        sharedscripts
+        postrotate
+                passenger-config reopen-logs >/dev/null 2>&1 || true
+        endscript
+}
