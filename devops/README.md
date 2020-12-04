@@ -12,7 +12,7 @@ This is set of tutorials and snippets related to DevOps, deployment, and mainten
   - [Application](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application)
   - [Managing your "secrets"](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#managing-your-secrets)
   - [non-root user](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application-user)
-  - [MongoDB](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application)
+  - [MongoDB](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#mongodb)
 - [Nginx setup](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#nginx)
 - [Deploy](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy)
   - [Deploy script features](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-script-features)
