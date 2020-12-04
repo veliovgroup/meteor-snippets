@@ -12,6 +12,7 @@
 
 restart=false
 isMeteor=false
+isMeteorClient=false
 isPassenger=false
 isStatic=false
 isHelp=false
@@ -21,12 +22,13 @@ debug=false
 appusername="appuser"
 nginxusername="www-data"
 
-while getopts ":h?brmpsnd" opt; do
+while getopts ":h?brmcpsnd" opt; do
   case "$opt" in
   h|\?) isHelp=true;;
   b) build=true;;
   r) restart=true;;
   m) isMeteor=true;;
+  c) isMeteorClient=true;;
   p) isPassenger=true;;
   s) isStatic=true;;
   n) reload=true;;
@@ -50,6 +52,7 @@ if [ "$debug" = true ]; then
   echo "isHelp: $isHelp;"
   echo "restart: $restart;"
   echo "isMeteor: $isMeteor;"
+  echo "isMeteorClient: $isMeteorClient;"
   echo "isPassenger: $isPassenger;"
   echo "isStatic: $isStatic;"
   echo "reload: $reload;"
@@ -73,6 +76,7 @@ if [ "$isHelp" = true ]; then
   echo "-b          - Build, install dependencies & move files around"
   echo "-r          - Restart server after deployment"
   echo "-m          - Build meteor app"
+  echo "-c          - Build meteor client app, using \`meteor-build-client\`"
   echo "-p          - Force Phusion Passenger deployment scenario"
   echo "-s          - Force static website deployment scenario"
   echo "-n          - Reload Nginx __configuration__ without downtime"
@@ -87,6 +91,9 @@ if [ "$isHelp" = true ]; then
   echo ""
   echo "Build and deploy Meteor app spawned by Phusion Passenger:"
   echo "$ ./deploy -bmpr meteor-app"
+  echo ""
+  echo "Build and deploy Meteor Client app:"
+  echo "$ ROOT_URL=\"https://example.com\" ./deploy -bmc meteor-app"
   echo ""
   echo "Build and deploy Node.js spawned by Phusion Passenger:"
   echo "$ ./deploy -bpr nodejs-app"
@@ -108,6 +115,14 @@ if [ -z "$name" ] || [ ! -d "./$name" ]; then
   echo "git clone [path-to-repository], use"
   echo "$ ./deploy.sh -h"
   echo "to get help"
+  exit 1
+fi
+
+if [ "$isMeteorClient" = true ] && [ -z "$ROOT_URL" ]; then
+  echo "ROOT_URL environment variable is required when running with \`-c\` flag"
+  echo ""
+  echo "Example:"
+  echo "$ ROOT_URL=\"https://example.com\" ./deploy.sh -bmc repo"
   exit 1
 fi
 
@@ -150,52 +165,70 @@ if [ "$build" = true ]; then
       exit 1
     fi
 
-    echo "[ 2.1. ] Running Meteor.js deployment scenario! Building meteor app to ../$name-build"
+    echo "[ 2.1. ] Running Meteor.js deployment scenario! Building meteor app to /home/$appusername/$name-build"
     # Install NPM dependencies
     echo "[ 2.2. ] Installing NPM dependencies in working meteor app directory"
     su -s /bin/bash -c "cd /home/$appusername/$name && meteor npm ci" - "$appusername"
 
-    echo "[ 2.3. ] Building meteor app to ../$name-build"
-    su -s /bin/bash -c "cd /home/$appusername/$name && METEOR_DISABLE_OPTIMISTIC_CACHING=1 meteor build ../$name-build --directory" - "$appusername"
+    echo "[ 2.3. ] Building meteor app to /home/$appusername/$name-build"
+    su -s /bin/bash -c "cd /home/$appusername/$name && METEOR_DISABLE_OPTIMISTIC_CACHING=1 meteor build /home/$appusername/$name-build --directory" - "$appusername"
+    echo "[ 2.4.* ] Meteor app successfully build!"
 
-    echo "[ 2.4. ] Meteor app successfully build! Going to ../$name-build/bundle"
-    cd "../$name-build/bundle"
+    if [ "$isMeteorClient" = true ]; then
+      echo "[ 2.4.0 ] Running \`meteor-build-client\` deployment scenario!"
+      echo "[ 2.4.1 ] Building client assets to /home/$appusername/$name-build-client"
+      su -s /bin/bash -c "meteor-build-client /home/$appusername/$name-build-client --url $ROOT_URL --usebuild /home/$appusername/$name-build" - "$appusername"
+      echo "[ 2.4.2 ] meteor-build-client successfully finished!"
 
-    echo "[ 2.5. ] Move static Meteor files to /public directory"
-    mkdir -p ./public
-    cp ./programs/web.browser/*.css ./public/
-    cp ./programs/web.browser/*.js ./public/
-    cp ./programs/web.browser.legacy/*.css ./public/
-    cp ./programs/web.browser.legacy/*.js ./public/
-    rsync -qauh ./programs/web.browser/app/ ./public
-    rsync -qauh ./programs/web.browser.legacy/app/ ./public
-    rsync -qauh ./programs/web.browser/packages/ ./public
-    rsync -qauh ./programs/web.browser.legacy/packages/ ./public
+      echo "[ 2.5.0 ] Move static Meteor files to /public directory"
+      mkdir -p "/var/www/$name/public"
+      rsync -qauh "/home/$appusername/$name-build-client/" "/var/www/$name/public"
 
-    echo "[ 2.6. ] Ensure /var/www/$name/programs/web.browser/"
-    mkdir -p "/var/www/$name/programs/web.browser/"
+      echo "[ 2.5.1 ] Clean up /home/$appusername/$name-build-client/"
+      rm -Rf "/home/$appusername/$name-build-client/"
+    else
+      echo "[ 2.4.0 ] Going to /home/$appusername/$name-build/bundle"
+      cd "/home/$appusername/$name-build/bundle"
+
+      echo "[ 2.5. ] Move static Meteor files to /public directory"
+      mkdir -p ./public
+      cp ./programs/web.browser/*.css ./public/
+      cp ./programs/web.browser/*.js ./public/
+      cp ./programs/web.browser.legacy/*.css ./public/
+      cp ./programs/web.browser.legacy/*.js ./public/
+      rsync -qauh ./programs/web.browser/app/ ./public
+      rsync -qauh ./programs/web.browser.legacy/app/ ./public
+      rsync -qauh ./programs/web.browser/packages/ ./public
+      rsync -qauh ./programs/web.browser.legacy/packages/ ./public
+
+      echo "[ 2.6. ] Ensure /var/www/$name/programs/web.browser/"
+      mkdir -p "/var/www/$name/programs/web.browser/"
+    fi
   fi
 
-  echo "[ 3.0. ] Copy files to /var/www/$name"
-  rsync -qauh ./ "/var/www/$name" --exclude=".git" --exclude=".gitattributes" --exclude="nginx.conf"  --exclude="mongod.conf"
+  if [ ! $isMeteorClient = true ]; then
+    echo "[ 3.0. ] Copy files to /var/www/$name"
+    rsync -qauh ./ "/var/www/$name" --exclude=".git" --exclude=".gitattributes" --exclude="nginx.conf"  --exclude="mongod.conf"
 
-  echo "[ 3.1. ] Going to /var/www/$name"
-  cd "/var/www/$name"
-
-  if [ "$isMeteor" = true ] && [ -d "/var/www/$name/programs/server" ]; then
-    # SET PERMISSIONS
-    echo "[ 3.2. ] Ensure permissions and ownership in the server directory before installing Meteor's dependencies"
-    chmod -R 744 ./
-    chmod 755 ./
-    chown -R "$appusername":"$appusername" ./
-
-    echo "[ *.*. ] Going to /var/www/$name/programs/server"
-    cd "/var/www/$name/programs/server"
-    echo "[ *.*. ] Installing Meteor's NPM dependencies"
-    su -s /bin/bash -c "cd /var/www/$name/programs/server && npm install --production" - "$appusername"
+    echo "[ 3.1. ] Going to /var/www/$name"
     cd "/var/www/$name"
+
+    if [ "$isMeteor" = true ] && [ -d "/var/www/$name/programs/server" ]; then
+      # SET PERMISSIONS
+      echo "[ 3.2. ] Ensure permissions and ownership in the server directory before installing Meteor's dependencies"
+      chmod -R 744 ./
+      chmod 755 ./
+      chown -R "$appusername":"$appusername" ./
+
+      echo "[ *.*. ] Going to /var/www/$name/programs/server"
+      cd "/var/www/$name/programs/server"
+      echo "[ *.*. ] Installing Meteor's NPM dependencies"
+      su -s /bin/bash -c "cd /var/www/$name/programs/server && npm install --production" - "$appusername"
+    fi
   fi
 
+  echo "[ 4.0.* ] Going to /var/www/$name"
+  cd "/var/www/$name"
   # CHECK FOR package.json
   # AND INSTALL DEPENDENCIES
   if [ -f "./package.json" ]; then
@@ -236,7 +269,6 @@ if [ "$restart" = true ]; then
     echo "[ 6.0. ] RESTARTING NGINX"
     service nginx stop
     service nginx start
-    service nginx status
     echo "[ 6.1. ] DISPLAY NGINX LOGS"
     tail -n 100 /var/log/nginx/error.log
   fi
