@@ -176,28 +176,31 @@ if [ "$build" = true ]; then
     mkdir -p "/var/www/$name/programs/web.browser/"
   fi
 
-  # SET PERMISSIONS
-  echo "[ 3.0. ] Ensure permissions and ownership in working directory"
-  chmod -R 744 ./
-  chmod 755 ./
-  chown -R "$appusername":"$appusername" ./
-
-  echo "[ 3.1. ] Copy files to /var/www/$name"
+  echo "[ 3.0. ] Copy files to /var/www/$name"
   rsync -qauh ./ "/var/www/$name" --exclude=".git" --exclude=".gitattributes" --exclude="nginx.conf"  --exclude="mongod.conf"
 
-  if [ "$isMeteor" = true ]; then
+  echo "[ 3.1. ] Going to /var/www/$name"
+  cd "/var/www/$name"
+
+  if [ "$isMeteor" = true ] && [ -d "/var/www/$name/programs/server" ]; then
+    # SET PERMISSIONS
+    echo "[ 3.2. ] Ensure permissions and ownership in the server directory before installing Meteor's dependencies"
+    chmod -R 744 ./
+    chmod 755 ./
+    chown -R "$appusername":"$appusername" ./
+
     echo "[ *.*. ] Going to /var/www/$name/programs/server"
     cd "/var/www/$name/programs/server"
     echo "[ *.*. ] Installing Meteor's NPM dependencies"
     su -s /bin/bash -c "cd /var/www/$name/programs/server && npm install --production" - "$appusername"
+    cd "/var/www/$name"
   fi
 
   # CHECK FOR package.json
   # AND INSTALL DEPENDENCIES
-  echo "[ 4.0. ] Going to /var/www/$name"
-  cd "/var/www/$name"
   if [ -f "./package.json" ]; then
-    echo "[ 4.1. ] \`packages.json\` detected! Installing NPM dependencies"
+    echo "[ 4.0. ] \`packages.json\` detected!"
+    echo "[ 4.1. ] Installing NPM dependencies as \`$appusername\`"
     su -s /bin/bash -c "cd /var/www/$name && npm ci --production" - "$appusername"
   fi
 
@@ -230,14 +233,12 @@ if [ "$restart" = true ]; then
     echo "[ 6.1. ] DISPLAY PASSENGER LOGS"
     tail -n 100 /var/log/nginx/error.log
   else
-    if [ "$isStatic" = true ]; then
-      echo "[ 6.0. ] RESTARTING NGINX"
-      service nginx stop
-      service nginx start
-      service nginx status
-      echo "[ 6.1. ] DISPLAY NGINX LOGS"
-      tail -n 100 /var/log/nginx/error.log
-    fi
+    echo "[ 6.0. ] RESTARTING NGINX"
+    service nginx stop
+    service nginx start
+    service nginx status
+    echo "[ 6.1. ] DISPLAY NGINX LOGS"
+    tail -n 100 /var/log/nginx/error.log
   fi
 else
   if [ "$reload" = true ]; then
