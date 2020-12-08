@@ -199,10 +199,10 @@ Usage:
 -h          - Show this help and exit
 -b          - Build, install dependencies & move files around
 -r          - Restart server after deployment
--m          - Build meteor app
--c          - Build meteor client app, using `meteor-build-client`
+-m          - Build meteor app, use with `-b` flag
+-c          - Build meteor client app, using `meteor-build-client`, use with `-b` flag
 -p          - Force Phusion Passenger deployment scenario
--s          - Force static website deployment scenario
+-s          - Force static website deployment scenario, use with `-b` flag
 -n          - Reload Nginx __configuration__ without downtime
 -d          - Debug this script arguments and exit
 repo        - Name of web app repository and working directory
