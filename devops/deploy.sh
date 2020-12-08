@@ -75,10 +75,10 @@ if [ "$isHelp" = true ]; then
   echo "-h          - Show this help and exit"
   echo "-b          - Build, install dependencies & move files around"
   echo "-r          - Restart server after deployment"
-  echo "-m          - Build meteor app"
-  echo "-c          - Build meteor client app, using \`meteor-build-client\`"
+  echo "-m          - Build meteor app, use with \`-b\` flag"
+  echo "-c          - Build meteor client app, using \`meteor-build-client\`, use with \`-b\` flag"
   echo "-p          - Force Phusion Passenger deployment scenario"
-  echo "-s          - Force static website deployment scenario"
+  echo "-s          - Force static website deployment scenario, use with \`-b\` flag"
   echo "-n          - Reload Nginx __configuration__ without downtime"
   echo "-d          - Debug this script arguments and exit"
   echo "repo        - Name of web app repository and working directory"
@@ -87,23 +87,23 @@ if [ "$isHelp" = true ]; then
   echo ""
   echo "EXAMPLES:"
   echo "Deploy static website:"
-  echo "$ ./deploy -bs site-html"
+  echo "$ ./deploy.sh -bs site-html"
   echo ""
   echo "Build and deploy Meteor app spawned by Phusion Passenger:"
-  echo "$ ./deploy -bmpr meteor-app"
+  echo "$ ./deploy.sh -bmpr meteor-app"
   echo ""
   echo "Build and deploy Meteor Client app:"
-  echo "$ ROOT_URL=\"https://example.com\" ./deploy -bmc meteor-app"
+  echo "$ ROOT_URL=\"https://example.com\" ./deploy.sh -bmc meteor-app"
   echo ""
   echo "Build and deploy Node.js spawned by Phusion Passenger:"
-  echo "$ ./deploy -bpr nodejs-app"
+  echo "$ ./deploy.sh -bpr nodejs-app"
   echo ""
   echo "Update Nginx configuration only, or other non-codebase files"
   echo "This command will only sync Git repository and silently reload Nginx config"
-  echo "$ ./deploy -n myapp"
+  echo "$ ./deploy.sh -n myapp"
   echo ""
   echo "ONLY sync Git repository and place files into right places"
-  echo "$ ./deploy - myapp"
+  echo "$ ./deploy.sh - myapp"
   echo ""
   exit 1
 fi
@@ -155,13 +155,13 @@ echo "[ 2.0. ] Ensure /var/www/$name"
 mkdir -p "/var/www/$name"
 
 # BUILD
-if [ "$build" = true ]; then
+if [ "$build" = true ] || [ "$isStatic" = true ]; then
   # BUILD METEOR APP
   if [ "$isMeteor" = true ]; then
     # CHECK FOR .meteor DIRECTORY
     if [ ! -d "./.meteor" ]; then
       echo "[ *.*. ] Script started with \`-m\` flag requires \`./.meteor\` directory!"
-      echo "[ *.*. ] To build Meteor.js application and follow Meteor deployment scenario"
+      echo "[ *.*. ] to build Meteor.js application and follow Meteor deployment scenario"
       exit 1
     fi
 
