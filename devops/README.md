@@ -186,25 +186,31 @@ To deploy we use [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/bl
 - [First deploysteps](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#first-deploy)
 - [Deploy Node.js app](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-nodejs-app)
 - [Deploy Meteor app](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-meteor-app)
+- [Build and deploy meteor client bundle](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#build-and-deploy-meteor-client)
 - [Deploy static assets app](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-static-app)
-- [Deploy after changes in Nginx](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-with-changes-in-nginxconf) configuration file
+- [Deploy after changes in Nginx](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-with-changes-in-nginxconf) __configuration__ file
 
 By default [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh) script able to deploy static, node.js, and meteor.js websites backed with Nginx. You can get up-to-date help from `./deploy -h`, script manual:
 
 ```text
 Usage:
-./deploy.sh repo [--help|--load-only|--meteor]
+./deploy.sh -[args] repo [username] [nginxuser]
 
-By default this script will restart Passenger, unless --load-only is passed
-Otherwise it will restart Phusion Passenger after sources update
-
+-h          - Show this help and exit
+-b          - Build, install dependencies & move files around
+-r          - Restart server after deployment
+-m          - Build meteor app
+-c          - Build meteor client app, using `meteor-build-client`
+-p          - Force Phusion Passenger deployment scenario
+-s          - Force static website deployment scenario
+-n          - Reload Nginx __configuration__ without downtime
+-d          - Debug this script arguments and exit
 repo        - Name of web app repository and working directory
---help | -h - This help docs
---load-only - Load only source code without Passenger restart
---meteor    - Build meteor app locally
+[username]  - Username of an "application user" owned app files and used to spawn a process, default: `appuser`
+[nginxuser] - Username used to spawn a process and access files by Nginx, default: `www-data`
 ```
 
-To start using script (*[run as `apppuser` user](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application-user)*):
+To start using script (*[run it as `apppuser` user](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application-user)*):
 
 - Login as `appuser` with `su - appuser`
 - Copy-paste [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh) to non-root user "home" directory in our case it will be `/home/appuser/deploy.sh`
@@ -212,8 +218,8 @@ To start using script (*[run as `apppuser` user](https://github.com/veliovgroup/
 
 ### Deploy script features
 
-- Compatible with static websites
-- Compatible with node.js backends
+- Compatible with static websites (html or client-only JS websites, like ones build with [`meteor-build-client`](https://github.com/frozeman/meteor-build-client))
+- Compatible with `http`, `https`, `express`, and similar implementations of node.js backend
 - Compatible with (*raw and build*) meteor.js web applications
 - Gap-less zero-downtime deployments
 
@@ -221,17 +227,17 @@ To start using script (*[run as `apppuser` user](https://github.com/veliovgroup/
 
 First deploy require some extra preparation:
 
-0. As `root` go to `appuser` user "home" directory, with `cd /home/appuser/`
-1. `git clone [repo-url]` — Clone repository to a local directory ([`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh) should be located in the same directory)
-2. Run deploy script with `--no-restart` flag (*see examples below*)
-3. Restart nginx: `service nginx restart`
+0. As `root` go to `appuser` user "home" directory — `cd /home/appuser/`
+1. `git clone [repo-url]` — Clone repository to a local directory ([`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh) should be located in the same directory, recommended to use SSH protocol for cloning)
+2. Run deploy script with `-r` flag (restart flag) (*see examples below*)
 
 ```shell
-./deploy.sh app-directory-name --no-restart
-# Double-check config for errors:
-service nginx configtest
-# restart nginx
-service nginx restart
+./deploy.sh -bmr app-directory-name
+
+# where:
+#  -b - Move files into right directories
+#  -m - Build meteor app
+#  -r - Restart nginx at the end
 ```
 
 ### Deploy node.js app
@@ -239,7 +245,11 @@ service nginx restart
 Run this script against repository with `package.json` and `nginx.conf` in the root directory.
 
 ```shell
-./deploy.sh app-directory-name
+./deploy -bpr app-directory-name
+
+# where:
+#  -b  - Move files into right directories
+#  -pr - Run Phusion Passenger scenario and restart without downtime
 ```
 
 ### Deploy Meteor app
@@ -247,27 +257,45 @@ Run this script against repository with `package.json` and `nginx.conf` in the r
 Run this script against repository with `.meteor` and `nginx.conf` in the root directory.
 
 ```shell
-./deploy.sh app-directory-name --meteor
+./deploy -bmpr app-directory-name
+
+# where:
+#  -b  - Move files into right directories
+#  -m  - Build meteor app
+#  -pr - Run Phusion Passenger scenario and restart without downtime
+```
+
+### Build and deploy meteor client
+
+Run this script against repository with `.meteor` and `nginx.conf` in the root directory to build client-only and static version of Meteor application with [`meteor-build-client`](https://github.com/frozeman/meteor-build-client):
+
+```shell
+ROOT_URL=\"https://example.com\" ./deploy.sh -bmc app-directory-name
+
+# ROOT_URL env.var is required to properly serve client bundle
+# where:
+#  -b  - Move files into right directories
+#  -mc - Build meteor application with meteor-build-client
 ```
 
 ### Deploy static app
 
-Run this script against repository with `nginx.conf` in the root directory. If static app powered with node and `package.json` is found in the root directory script will install all required dependencies.
+Run this script against repository with `nginx.conf` in the root directory.
 
 ```shell
-./deploy.sh app-directory-name --no-restart
+./deploy -bs app-directory-name
+
+# where:
+#  -b - Move files into right directories
+#  -s - Run static website scenario
 ```
 
 ### Deploy with changes in `nginx.conf`
 
-If `nginx.conf` host definition was changed it would require `--no-restart` flag and two extra steps to run gap-less zero-downtime deploy:
+If `nginx.conf` host definition was changed it would require `-n` to run gap-less zero-downtime deploy:
 
 ```shell
-./deploy.sh app-directory-name --no-restart
-# Double-check config for errors:
-service nginx configtest
-# restart nginx
-service nginx restart
+./deploy.sh -n app-directory-name
 ```
 
 ## SEO
@@ -351,7 +379,7 @@ new FlowRouterMeta(FlowRouter);
 
 ### Pre-rendering
 
-To pre-render JS-driven templates (Blaze, React, Vue, etc.) to HTML we are using [pre-rendering](https://ostr.io/info/prerendering) via [`siderable-middleware` package](https://github.com/VeliovGroup/spiderable-middleware#meteor-specific-usage):
+To pre-render JS-driven templates (Blaze, React, Vue, etc.) to HTML we are using [pre-rendering](https://ostr.io/info/prerendering) via [`spiderable-middleware` package](https://github.com/VeliovGroup/spiderable-middleware#meteor-specific-usage):
 
 ```js
 /*
