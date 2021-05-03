@@ -60,17 +60,17 @@ Check out set of [Linux tutorials](https://github.com/veliovgroup/ostrio/tree/ma
 2. `apt-get remove sudo` — *let's discuss it in the issues*
 3. First `apt-get dist-upgrade -s` to check if there's any updates available
 4. Then `apt-get dist-upgrade -y` updating all packages and Linux itself
-5. [Changed timezone](https://github.com/VeliovGroup/ostrio/blob/master/tutorials/linux/change-timezone.md) to UTC
-6. [Tuned up my `.bash_profile`](https://github.com/veliovgroup/ostrio/blob/master/tutorials/linux/bash_profile-tuning.md) for ease of Terminal use
-7. Installed `mongo` and started service with `systemctl start mongod`
-8. Copy-pasted `mongod.conf` MongoDB configuration file from this repo to `/etc/mongod.conf` __changing default [PORT]__ to a random port
+5. [Change timezone](https://github.com/VeliovGroup/ostrio/blob/master/tutorials/linux/change-timezone.md) to UTC
+6. [Tune up `.bash_profile`](https://github.com/veliovgroup/ostrio/blob/master/tutorials/linux/bash_profile-tuning.md) for ease of Terminal use
+7. Installe `mongo` and started service with `systemctl start mongod`
+8. Copy-paste `mongod.conf` MongoDB configuration file from this repo to `/etc/mongod.conf` __changing default [PORT]__ to a random port
 9. Create `/data` and `/data/mongo` directories with access permission by `mongodb` user; To double-check *service* user's names in Lunix use `cat /etc/passwd`
-10. Install Nginx following instruction from Phusion Passenger website
+10. [Install Nginx flavored with Phusion Passenger](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/steps.sh#L92)
 11. For security reasons create `appuser` user, see [`steps.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/steps.sh) for more details
-12. Copy-pasted `nginx.conf` from this repo to `/etc/nginx/nginx.conf`
+12. Copy-paste `nginx.conf` from this repo to `/etc/nginx/nginx.conf`
 13. Create empty configuration file with `touch etc/nginx/secrets.files-veliov-com.conf`
 14. Install meteor as `appuser` with `curl https://install.meteor.com/ | sh`
-15. Install NVM (Node Version Manager) as `app user` to be able to run multiple meteor and node applications under different versions of node.js
+15. Install NVM (Node Version Manager) as `appuser` to be able to run multiple meteor and node applications under different versions of node.js
 16. Add load command for NVM script to `/home/appuser/.bash_profile` of `appuser` user
 17. Create storage directory for uploaded files and set correct permissions `mkdir -p /data/meteor-files && chown appuser:appuser /data/meteor-files`
 18. Initiate first deploy `cd /home/appuser && ./deploy meteor-files-website --no-restart --meteor`
@@ -82,7 +82,7 @@ Implement well-known "best practices" for Linux, Nginx, and MongoDB. Check out o
 
 - [Application level security](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application)
 - [Manage "secrets"](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#managing-your-secrets)
-- [User non-root user](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application-user)
+- [Use non-root user](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application-user)
 - [MongoDB Security](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#application)
 
 ### Application
@@ -183,7 +183,7 @@ application/x-web-app-manifest+json   webapp;
 To deploy we use [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh).
 
 - [Deploy script features](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-script-features)
-- [First deploysteps](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#first-deploy)
+- [First deployment steps](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#first-deploy)
 - [Deploy Node.js app](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-nodejs-app)
 - [Deploy Meteor app](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-meteor-app)
 - [Build and deploy meteor client bundle](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#build-and-deploy-meteor-client)
