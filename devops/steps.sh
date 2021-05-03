@@ -60,7 +60,7 @@ export PATH=$PATH:$HOME/.meteor
 #
 # Execute this command as "appuser" for security reasons
 # Node Version Manager: https://github.com/nvm-sh/nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 # Add next two lines into `.bash_profile`
 # edit with nano ~/.bash_profile
 export NVM_DIR="$HOME/.nvm"
@@ -70,8 +70,8 @@ export NVM_DIR="$HOME/.nvm"
 source ~/.bash_profile
 
 # install required Node by Meteor as of Oct 2020
-nvm install 12.18.4
-nvm use 12.18.4
+nvm install 12.22.1
+nvm use 12.22.1
 
 # Symlink .bashrc to .bash_profile
 # so environment would be loaded
