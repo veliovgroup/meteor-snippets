@@ -27,6 +27,9 @@ systemctl enable mongod.service
 mkdir -p /data/mongo
 chmod 777 /data
 chown mongodb:mongodb /data/mongo
+# CREATE MONGODB LOG-FILE
+touch /var/log/mongodb/mongod.log
+chown mongodb:mongodb /var/log/mongodb/mongod.log
 
 # FOR SECURITY REASONS AND AS A PART OF "BEST PRACTICES"
 # IT IS HIGHLY RECOMMENDED TO INSTALL CERTAIN APPS AND
@@ -50,7 +53,7 @@ su -s /bin/bash -l appuser
 # Install meteor.js
 # Execute this command as "appuser" for security reasons
 curl https://install.meteor.com/ | sh
-# Add next two lines into `.bash_profile`
+# Add next line into `.bash_profile`
 # edit with nano ~/.bash_profile
 export PATH=$PATH:$HOME/.meteor
 
@@ -69,9 +72,9 @@ export NVM_DIR="$HOME/.nvm"
 # Reload `.bash_profile`
 source ~/.bash_profile
 
-# install required Node by Meteor as of Oct 2020
-nvm install 12.18.4
-nvm use 12.18.4
+# install required Node by Meteor as of May 2021
+nvm install 12.22.1
+nvm use 12.22.1
 
 # Symlink .bashrc to .bash_profile
 # so environment would be loaded
@@ -117,6 +120,6 @@ chown appuser:appuser /data/meteor-files
 # Got to appuser's home directory
 cd /home/appuser
 # -------- First deploy --------
-./deploy -bmpr meteor-files-website
+./deploy.sh -bmpr meteor-files-website
 
 service nginx restart
