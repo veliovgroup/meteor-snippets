@@ -73,7 +73,7 @@ Check out set of [Linux tutorials](https://github.com/veliovgroup/ostrio/tree/ma
 15. Install NVM (Node Version Manager) as `appuser` to be able to run multiple meteor and node applications under different versions of node.js
 16. Add load command for NVM script to `/home/appuser/.bash_profile` of `appuser` user
 17. Create storage directory for uploaded files and set correct permissions `mkdir -p /data/meteor-files && chown appuser:appuser /data/meteor-files`
-18. Initiate first deploy `cd /home/appuser && ./deploy meteor-files-website --no-restart --meteor`
+18. Initiate first deploy `cd /home/appuser && ./deploy.sh meteor-files-website --no-restart --meteor`
 19. Restart Nginx `service nginx restart`
 
 ## Security
@@ -190,7 +190,7 @@ To deploy we use [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/bl
 - [Deploy static assets app](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-static-app)
 - [Deploy after changes in Nginx](https://github.com/veliovgroup/meteor-snippets/tree/main/devops#deploy-with-changes-in-nginxconf) __configuration__ file
 
-By default [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh) script able to deploy static, node.js, and meteor.js websites backed with Nginx. You can get up-to-date help from `./deploy -h`, script manual:
+By default [`deploy.sh`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/deploy.sh) script able to deploy static, node.js, and meteor.js websites backed with Nginx. You can get up-to-date help from `./deploy.sh -h`, script manual:
 
 ```text
 Usage:
@@ -245,7 +245,7 @@ First deploy require some extra preparation:
 Run this script against repository with `package.json` and `nginx.conf` in the root directory.
 
 ```shell
-./deploy -bpr app-directory-name
+./deploy.sh -bpr app-directory-name
 
 # where:
 #  -b  - Move files into right directories
@@ -257,7 +257,7 @@ Run this script against repository with `package.json` and `nginx.conf` in the r
 Run this script against repository with `.meteor` and `nginx.conf` in the root directory.
 
 ```shell
-./deploy -bmpr app-directory-name
+./deploy.sh -bmpr app-directory-name
 
 # where:
 #  -b  - Move files into right directories
@@ -283,7 +283,7 @@ ROOT_URL=\"https://example.com\" ./deploy.sh -bmc app-directory-name
 Run this script against repository with `nginx.conf` in the root directory.
 
 ```shell
-./deploy -bs app-directory-name
+./deploy.sh -bs app-directory-name
 
 # where:
 #  -b - Move files into right directories
