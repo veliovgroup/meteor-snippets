@@ -172,7 +172,7 @@ if [ "$build" = true ] || [ "$isStatic" = true ]; then
 
     echo "[ 2.3. ] Building meteor app to /home/$appusername/$name-build"
     su -s /bin/bash -c "cd /home/$appusername/$name && METEOR_DISABLE_OPTIMISTIC_CACHING=1 meteor build /home/$appusername/$name-build --directory" - "$appusername"
-    echo "[ 2.4.* ] Meteor app successfully build!"
+    echo "[ 2.4.* ] Meteor app successfully built!"
 
     if [ "$isMeteorClient" = true ]; then
       echo "[ 2.4.0 ] Running \`meteor-build-client\` deployment scenario!"
