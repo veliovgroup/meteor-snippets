@@ -150,6 +150,12 @@ echo deb https://oss-binaries.phusionpassenger.com/apt/passenger buster main > /
 apt-get update
 apt-get install -y libnginx-mod-http-passenger
 ```
+PLEASE NOTE THE ABOVE WILL WORK FOR DEBIAN 10 
+So before check with `lsb_release -a` if the versio is different that 10, use corrent codename in package list 
+`echo deb https://oss-binaries.phusionpassenger.com/apt/passenger Codename main > /etc/apt/sources.list.d/passenger.list`
+For example for Debian 11 it's bullseye.
+Sadly right now libnginx-mod-http-passenger does not support bullseye, so I've tried focal
+There are different tickets like https://github.com/phusion/passenger/issues/2122 but I don't think they fixed it so far.
 
 Copy paste [`nginx.conf`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/nginx.conf) from this repo to `/etc/nginx/nginx.conf`. Phusion Passenger enable simple and easy configuration passing environment variables to the application from Nginx configuration file using `passenger_env_var`. Create an empty configuration file `secrets.files-veliov-com.conf` with `touch etc/nginx/secrets.files-veliov-com.conf`. This file will be used to store application "secrets", in our case:
 
