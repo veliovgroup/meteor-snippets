@@ -62,7 +62,7 @@ Check out set of [Linux tutorials](https://github.com/veliovgroup/ostrio/tree/ma
 4. Then `apt-get dist-upgrade -y` updating all packages and Linux itself
 5. [Change timezone](https://github.com/VeliovGroup/ostrio/blob/master/tutorials/linux/change-timezone.md) to UTC
 6. [Tune up `.bash_profile`](https://github.com/veliovgroup/ostrio/blob/master/tutorials/linux/bash_profile-tuning.md) for ease of Terminal use
-7. Installe `mongo` and started service with `systemctl start mongod`
+7. Install `mongo` and started service with `systemctl start mongod`
 8. Copy-paste `mongod.conf` MongoDB configuration file from this repo to `/etc/mongod.conf` __changing default [PORT]__ to a random port
 9. Create `/data` and `/data/mongo` directories with access permission by `mongodb` user; To double-check *service* user's names in Lunix use `cat /etc/passwd`
 10. [Install Nginx flavored with Phusion Passenger](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/steps.sh#L92)
