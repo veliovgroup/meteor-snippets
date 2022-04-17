@@ -10,6 +10,8 @@
 # - test nginx configuration files
 # - no down-time restart
 
+set -e
+
 restart=false
 isMeteor=false
 isMeteorClient=false
