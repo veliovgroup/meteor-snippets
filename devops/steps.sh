@@ -15,8 +15,8 @@ dpkg-reconfigure tzdata
 # DETAILED TUTORIAL: https://github.com/VeliovGroup/ostrio/blob/master/tutorials/linux/bash_profile-tuning.md
 
 # Install local MongoDB
-wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add -
-echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" | tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | apt-key add -
+echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/5.0 main" | tee /etc/apt/sources.list.d/mongodb-org-5.0.list
 apt-get update
 apt-get install -y mongodb-org
 systemctl start mongod
