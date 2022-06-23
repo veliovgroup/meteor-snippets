@@ -1,17 +1,17 @@
-/*
+/**
  * @locus public
  */
 
 ;(function (self) {
   'use strict';
-  /*
+  /**
    * @constant
    * @name CACHE_NAME
    * @type {string}
    * @summary UNIQUE CACHE KEY, `v*` SHOULD GET INCREMETED WITH ANY CHANGES TO THIS FILE
    */
   const CACHE_NAME = 'cacheKey-v2';
-  /*
+  /**
    * @constant
    * @name PAGES
    * @type {string[]}
@@ -22,7 +22,7 @@
   // STORE self.location.origin IN SHORT VARIABLE
   const origin = self.location.origin;
 
-  /*
+  /**
    * REGULAR EXPRESSIONS
    * - `html` - Used to check if request is for HTML content
    * - `method` - Used to check if this is GET request
@@ -38,7 +38,7 @@
     sockjs: /\/sockjs\//
   };
 
-  /*
+  /**
    * @function
    * @name exceptionHandler
    * @param {(Object|string)} error - Request error
@@ -56,7 +56,7 @@
     });
   };
 
-  /*
+  /**
    * @function
    * @name cacheOrException
    * @param {Request} req - Request object
@@ -73,7 +73,7 @@
     return exceptionHandler(error);
   };
 
-  /*
+  /**
    * @function
    * @name requestCheck
    * @param {Request} req - Request object
@@ -84,7 +84,7 @@
     return RE.method.test(req.method) && !RE.sockjs.test(req.url) && !req.headers.get('Range');
   };
 
-  /*
+  /**
    * @function
    * @name originStaticCheck
    * @param {Request} req - Request object
@@ -95,7 +95,7 @@
     return req.url === origin || req.url === `${origin}/` || (req.url.startsWith(origin) && RE.static.test(req.url));
   };
 
-  /*
+  /**
    * @function
    * @name vendorStaticCheck
    * @param {Request} req - Request object
@@ -106,7 +106,7 @@
     return RE.staticVendors.test(req.url) && RE.static.test(req.url);
   };
 
-  /*
+  /**
    * SET `install` EVENT LISTENER
    * PRE-CACHE ALL URIs DEFINED IN THE `PAGES` CONSTANT
    */
@@ -118,7 +118,7 @@
     await self.skipWaiting();
   });
 
-  /*
+  /**
    * SET `fetch` EVENT LISTENER
    * MAIN CACHE LOGIC IS LOCATED HERE
    *
@@ -153,7 +153,7 @@
     }
   });
 
-  /*
+  /**
    * SET `activate` EVENT LISTENER
    * CHECK THAT WE ARE ON RIGHT CACHE AND SERVICE WORKER VERSION
    * COMPARING `CACHE_NAME` CONSTANT WITH AVAILABLE CACHES BY NAME
@@ -186,7 +186,7 @@
     }
   });
 
-  /*
+  /**
    * SET `push` EVENT LISTENER
    * CATCH WEB-PUSH NOTIFICATIONS
    * DISPLAY *NATIVE* NOTIFICATION BOX
@@ -201,7 +201,7 @@
     }
   });
 
-  /*
+  /**
    * SET `notificationclick` EVENT LISTENER
    * CLICK EVENT ON THE WEB-PUSH NOTIFICATION BOX
    *

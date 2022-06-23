@@ -1,4 +1,4 @@
-/*
+/**
  * @locus Server
  */
 
@@ -7,7 +7,7 @@ import { Meteor } from 'meteor/meteor';
 // meteor npm install web-push --save
 import webpush from 'web-push';
 
-/*
+/**
  * @constant
  * @name DEFAULT_MESSAGE
  * @summary OBJECT WITH MOST USED AND REQUIRED FIELDS OF WEB-PUSH NOTIFICATION
@@ -41,7 +41,7 @@ if (vapid && vapid.email && vapid.privateKey && Meteor.settings.public.vapid?.pu
 }
 
 const webPush = {
-  /*
+  /**
    * Send push notification with message
    *
    * @method

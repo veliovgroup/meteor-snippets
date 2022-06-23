@@ -1,11 +1,11 @@
-/*
+/**
  * @locus Client
  */
 
 import { Reload } from 'meteor/reload';
 // import { webPush } from './web-push.js';
 
-/*
+/**
  * @function
  * @name onReload
  * @summary REFRESH, INVALIDATE, UNREGISTER, AND PURGE ALL POSSIBLE CACHES. THEN RELOAD THE PAGE

@@ -1,10 +1,10 @@
-/*
+/**
  * @locus Client
  */
 
 import { Meteor } from 'meteor/meteor';
 
-/*
+/**
  * @function
  * @name setUpServiceWorker
  * @param {boolean} force - Register new service worker ignoring existing controller

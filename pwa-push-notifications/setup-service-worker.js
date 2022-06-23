@@ -1,4 +1,4 @@
-/*
+/**
  * @locus Client
  */
 
@@ -6,7 +6,7 @@ import { Meteor } from 'meteor/meteor';
 import { webPush } from './web-push.js';
 import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 
-/*
+/**
  * @function
  * @name setUpServiceWorker
  * @param {boolean} force - Register new service worker ignoring existing controller
