@@ -73,7 +73,7 @@ Check out set of [Linux tutorials](https://github.com/veliovgroup/ostrio/tree/ma
 15. Install NVM (Node Version Manager) as `appuser` to be able to run multiple meteor and node applications under different versions of node.js
 16. Add load command for NVM script to `/home/appuser/.bash_profile` of `appuser` user
 17. Create storage directory for uploaded files and set correct permissions `mkdir -p /data/meteor-files && chown appuser:appuser /data/meteor-files`
-18. Initiate first deploy `cd /home/appuser && ./deploy.sh meteor-files-website --no-restart --meteor`
+18. Initiate first deploy `cd /home/appuser && ./deploy.sh -bmr meteor-files-website`
 19. Restart Nginx `service nginx restart`
 
 ## Security
@@ -232,6 +232,7 @@ First deploy require some extra preparation:
 2. Run deploy script with `-r` flag (restart flag) (*see examples below*)
 
 ```shell
+
 ./deploy.sh -bmr app-directory-name
 
 # where:
@@ -382,7 +383,7 @@ new FlowRouterMeta(FlowRouter);
 To pre-render JS-driven templates (Blaze, React, Vue, etc.) to HTML we are using [pre-rendering](https://ostr.io/info/prerendering) via [`spiderable-middleware` package](https://github.com/VeliovGroup/spiderable-middleware#meteor-specific-usage):
 
 ```js
-/*
+/**
  * @locus Server
  */
 
