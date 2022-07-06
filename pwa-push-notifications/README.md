@@ -35,7 +35,7 @@ To push messages from server use [`web-push`](npmjs.com/package/web-push) NPM pa
 
 ### Changes in Service Worker
 
-Inside `activate` event and send `webPush.enable` event to the main-thread window:
+Send `webPush.enable` event to the main-thread window inside `activate` event:
 
 ```js
 self.addEventListener('activate', async (event) => {

@@ -62,7 +62,7 @@ Check out set of [Linux tutorials](https://github.com/veliovgroup/ostrio/tree/ma
 4. Then `apt-get dist-upgrade -y` updating all packages and Linux itself
 5. [Change timezone](https://github.com/VeliovGroup/ostrio/blob/master/tutorials/linux/change-timezone.md) to UTC
 6. [Tune up `.bash_profile`](https://github.com/veliovgroup/ostrio/blob/master/tutorials/linux/bash_profile-tuning.md) for ease of Terminal use
-7. Install `mongo` and start "service" with `systemctl start mongod`
+7. Install `mongo` and started service with `systemctl start mongod`
 8. Copy-paste `mongod.conf` MongoDB configuration file from this repo to `/etc/mongod.conf` __changing default [PORT]__ to a random port
 9. Create `/data` and `/data/mongo` directories with access permission by `mongodb` user; To double-check *service* user's names in Linux use `cat /etc/passwd`
 10. [Install Nginx flavored with Phusion Passenger](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/steps.sh#L92)
@@ -152,6 +152,12 @@ echo deb https://oss-binaries.phusionpassenger.com/apt/passenger buster main > /
 apt-get update
 apt-get install -y libnginx-mod-http-passenger
 ```
+PLEASE NOTE THE ABOVE WILL WORK FOR DEBIAN 10 
+So before check with `lsb_release -a` if the versio is different that 10, use corrent codename in package list 
+`echo deb https://oss-binaries.phusionpassenger.com/apt/passenger Codename main > /etc/apt/sources.list.d/passenger.list`
+For example for Debian 11 it's bullseye.
+Sadly right now libnginx-mod-http-passenger does not support bullseye, so I've tried focal
+There are different tickets like https://github.com/phusion/passenger/issues/2122 but I don't think they fixed it so far.
 
 Copy paste [`nginx.conf`](https://github.com/veliovgroup/meteor-snippets/blob/main/devops/nginx.conf) from this repo to `/etc/nginx/nginx.conf`. Phusion Passenger enable simple and easy configuration passing environment variables to the application from Nginx configuration file using `passenger_env_var`. Create an empty configuration file `secrets.files-veliov-com.conf` with `touch etc/nginx/secrets.files-veliov-com.conf`. This file will be used to store application "secrets", in our case:
 
