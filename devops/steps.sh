@@ -25,8 +25,9 @@ systemctl enable mongod.service
 # copy paste `mongod.conf` from this repo to `/etc/mongod.conf`
 
 mkdir -p /data/mongo
-chmod 777 /data
 chown mongodb:mongodb /data/mongo
+chmod 755 /data
+chmod -R 700 /data/mongo
 # CREATE MONGODB LOG-FILE
 touch /var/log/mongodb/mongod.log
 chown mongodb:mongodb /var/log/mongodb/mongod.log
