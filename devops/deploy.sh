@@ -10,7 +10,9 @@
 # - test nginx configuration files
 # - no down-time restart
 
-set -e
+# WHILE IT'S A GREAT OPTION
+# SCRIPT WILL GET STUCK WITH IT
+# set -e
 
 restart=false
 isMeteor=false
@@ -140,7 +142,9 @@ git pull || { echo "Can not sync Git repo; Please, fix issues before running dep
 # MOVE/UPDATE nginx.conf OF THE WEB APP
 if [ -f "./nginx.conf" ]; then
   echo "[ *.*. ] nginx.conf found! Copy to the nginx directory"
+  rm "/etc/nginx/sites-available/$name.conf"
   cp ./nginx.conf "/etc/nginx/sites-available/$name.conf"
+  rm "/etc/nginx/sites-enabled/$name.conf"
   ln -s "/etc/nginx/sites-available/$name.conf" "/etc/nginx/sites-enabled/$name.conf"
 
   echo "[ *.*. ] Nginx configuration: Ensure permissions and ownership"
@@ -215,25 +219,25 @@ if [ "$build" = true ] || [ "$isStatic" = true ]; then
     echo "[ 3.1. ] Going to /var/www/$name"
     cd "/var/www/$name"
 
-    if [ "$isMeteor" = true ] && [ -d "/var/www/$name/programs/server" ]; then
-      # SET PERMISSIONS
-      echo "[ 3.2. ] Ensure permissions and ownership in the server directory before installing Meteor's dependencies"
-      chmod -R 744 ./
-      chmod 755 ./
-      chown -R "$appusername":"$appusername" ./
+    # if [ "$isMeteor" = true ] && [ -d "/var/www/$name/programs/server" ]; then
+    #   # SET PERMISSIONS
+    #   # echo "[ 3.2. ] Ensure permissions and ownership in the server directory before installing Meteor's dependencies"
+    #   # chmod -R 744 ./
+    #   # chmod 755 ./
+    #   # chown -R "$appusername":"$appusername" ./
 
-      echo "[ *.*. ] Going to /var/www/$name/programs/server"
-      cd "/var/www/$name/programs/server"
-      echo "[ *.*. ] Installing Meteor's NPM dependencies"
-      su -s /bin/bash -c "cd /var/www/$name/programs/server && npm install --production" - "$appusername"
-    fi
+    #   # echo "[ *.*. ] Going to /var/www/$name/programs/server"
+    #   # cd "/var/www/$name/programs/server"
+    #   # echo "[ *.*. ] Installing Meteor's NPM dependencies"
+    #   # su -s /bin/bash -c "cd /var/www/$name/programs/server && npm install --production" - "$appusername"
+    # fi
   fi
 
   echo "[ 4.0.* ] Going to /var/www/$name"
   cd "/var/www/$name"
   # CHECK FOR package.json
   # AND INSTALL DEPENDENCIES
-  if [ -f "./package.json" ]; then
+  if [ ! "$isMeteor" = true ] && [ -f "./package.json" ]; then
     echo "[ 4.0. ] \`packages.json\` detected!"
     echo "[ 4.1. ] Installing NPM dependencies as \`$appusername\`"
     su -s /bin/bash -c "cd /var/www/$name && npm ci --production" - "$appusername"
