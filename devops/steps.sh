@@ -12,7 +12,7 @@ apt-get install git build-essential rsync apt-transport-https ca-certificates
 dpkg-reconfigure tzdata
 
 # tune up .bash_profile
-# DETAILED TUTORIAL: https://github.com/VeliovGroup/ostrio/blob/master/tutorials/linux/bash_profile-tuning.md
+# DETAILED TUTORIAL: https://github.com/veliovgroup/ostrio/blob/master/tutorials/linux/bash_profile-tuning.md
 
 # Install local MongoDB
 wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | apt-key add -
