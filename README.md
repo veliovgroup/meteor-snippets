@@ -10,7 +10,7 @@ Tutorials, demos, tricks'n tips, code snippets for Meteor.js ☄️
 
 ## About this repository
 
-This repository was created as supportive documentation to my talk at [Meteor Impact 2020](https://impact.meteor.com) conference. At the same time this is knowledge I had desire to share, I'm planning to keep documentation fresh and tidy, regularly adding more snippets. Discussions and PRs are welcome in the issues section.
+This repository was created as supportive documentation to my talk at [Meteor Impact 2020](https://impact.meteor.com) conference. At the same time this is knowledge we'd like to share. Discussions and PRs for new snippets are welcome in the issues section.
 
 ## ToC
 
