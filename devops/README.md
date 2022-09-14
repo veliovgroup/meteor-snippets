@@ -60,7 +60,7 @@ Check out set of [Linux tutorials](https://github.com/veliovgroup/ostrio/tree/ma
 2. `apt-get remove sudo` — *let's discuss it in the issues*
 3. First `apt-get dist-upgrade -s` to check if there's any updates available
 4. Then `apt-get dist-upgrade -y` updating all packages and Linux itself
-5. [Change timezone](https://github.com/VeliovGroup/ostrio/blob/master/tutorials/linux/change-timezone.md) to UTC
+5. [Change timezone](https://github.com/veliovgroup/ostrio/blob/master/tutorials/linux/change-timezone.md) to UTC
 6. [Tune up `.bash_profile`](https://github.com/veliovgroup/ostrio/blob/master/tutorials/linux/bash_profile-tuning.md) for ease of Terminal use
 7. Install `mongo` and started service with `systemctl start mongod`
 8. Copy-paste `mongod.conf` MongoDB configuration file from this repo to `/etc/mongod.conf` __changing default [PORT]__ to a random port
@@ -311,12 +311,12 @@ If `nginx.conf` host definition was changed it would require `-n` to run gap-les
 
 To make this project "crawlable" by search engines, social networks, and web-crawlers on this project we are using:
 
-- [`ostrio:flow-router-meta`](https://github.com/VeliovGroup/Meteor-flow-router-meta) package to generate meta-tags and title
+- [`ostrio:flow-router-meta`](https://github.com/veliovgroup/Meteor-flow-router-meta) package to generate meta-tags and title
 - [Pre-rendering](https://ostr.io/info/prerendering) service to serve static HTML
 
 ### Meta tags and title
 
-Using [`ostrio:flow-router-meta`](https://github.com/VeliovGroup/Meteor-flow-router-meta) package controlling meta-tags content as easy as extending *FlowRouter* definition with `{ meta, title, link }` properties:
+Using [`ostrio:flow-router-meta`](https://github.com/veliovgroup/Meteor-flow-router-meta) package controlling meta-tags content as easy as extending *FlowRouter* definition with `{ meta, title, link }` properties:
 
 ```js
 FlowRouter.route('/about', {
@@ -388,7 +388,7 @@ new FlowRouterMeta(FlowRouter);
 
 ### Pre-rendering
 
-To pre-render JS-driven templates (Blaze, React, Vue, etc.) to HTML we are using [pre-rendering](https://ostr.io/info/prerendering) via [`spiderable-middleware` package](https://github.com/VeliovGroup/spiderable-middleware#meteor-specific-usage):
+To pre-render JS-driven templates (Blaze, React, Vue, etc.) to HTML we are using [pre-rendering](https://ostr.io/info/prerendering) via [`spiderable-middleware` package](https://github.com/veliovgroup/spiderable-middleware#meteor-specific-usage):
 
 ```js
 /**
